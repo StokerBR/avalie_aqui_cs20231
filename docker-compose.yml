@@ -1,37 +1,19 @@
 version: '3.8'
 services:
-  avalieaqui-app:
-    container_name: 'avalieaqui-app'
-    image: 'avalieaqui-app'
+  api:
+    container_name: 'avalieaqui_api'
+    image: 'avalieaqui_api'
     build:
-      context: ./frontend/avalie_aqui
+      context: .
     env_file:
-      - ./frontend/avalie_aqui/src/.env.end
-    entrypoint: ['npm', 'run', 'start']
-    ports:
-      - 3000:3000
-    networks:
-      - avalieaqui-network
-    volumes:
-      - ./frontend/avalie_aqui:/app
-    depends_on:
-      - avalieaqui-api
-    restart: unless-stopped
-
-  avalieaqui-api:
-    container_name: 'avalieaqui-api'
-    image: 'avalieaqui-api'
-    build:
-      context: ./backend/avalie-aqui
-    env_file:
-      - ./backend/avalie-aqui/docker.env
+      - docker.env
     entrypoint: ['./wait-for-postgres.sh', 'npm', 'run', 'start']
     ports:
       - 4000:4000
     networks:
       - avalieaqui-network
     volumes:
-      - ./backend/avalie-aqui:/app
+      - ./:/app
     depends_on:
       - postgres-avalieaqui
     restart: unless-stopped
@@ -45,6 +27,8 @@ services:
       POSTGRES_PASSWORD: avalieaqui
       POSTGRES_USER: avalieaqui
       POSTGRES_DB: avalieaqui
+    ports:
+      - 5433:5432
     volumes:
       - './pgdata:/var/lib/postgresql/data'
 
