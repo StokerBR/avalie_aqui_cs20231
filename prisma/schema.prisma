@@ -1,0 +1,62 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+  binaryTargets = ["native", "linux-musl-openssl-3.0.x", "linux-musl"]
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id        Int      @default(autoincrement()) @id
+  email     String   @unique
+  name      String  
+  cpf       String   @unique
+  password  String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @default(now())
+  reviews   Review[]
+  
+  @@map("users")
+}
+
+model AdminUser {
+  id        Int      @default(autoincrement()) @id
+  email     String   @unique
+  name      String  
+  password  String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @default(now())
+  
+  @@map("admin_users")
+}
+
+model Product {
+  id        Int      @default(autoincrement()) @id
+  name      String   @unique
+  category  String  
+  image_url String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @default(now())
+  reviews   Review[] 
+  
+  @@map("products")
+}
+
+model Review {
+  id              Int      @default(autoincrement()) @id
+  reviewerId      Int     
+  reviewer        User     @relation(fields: [reviewerId], references: [id])
+  ratedProductId  Int 
+  ratedProduct    Product  @relation(fields: [ratedProductId], references: [id], onDelete: Cascade)
+  rating          Float
+  comments        String?  @db.Text
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @default(now())
+
+  @@map("reviews")
+}

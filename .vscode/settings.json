@@ -1,0 +1,7 @@
+{
+  "editor.defaultFormatter": "esbenp.prettier-vscode",
+  "editor.formatOnSave": true,
+  "folding-decorators.autoFold": true,
+  "editor.tabSize": 2,
+  "typescript.preferences.importModuleSpecifier": "relative"
+}
